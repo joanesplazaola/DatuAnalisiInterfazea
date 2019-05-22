@@ -1,0 +1,32 @@
+[
+  {
+    "model": "backend.AtazaMota",
+    "fields": {
+      "izena": "Erregresioa"
+    }
+  },
+  {
+    "model": "backend.AtazaMota",
+    "fields": {
+      "izena": "Sailkapena"
+    }
+  },
+  {
+    "model": "backend.AtazaMota",
+    "fields": {
+      "izena": "Anomalia detekzioa"
+    }
+  },
+  {
+    "model": "backend.DatuMota",
+    "fields": {
+      "izena": "Denbora segida"
+    }
+  },
+  {
+    "model": "backend.DatuMota",
+    "fields": {
+      "izena": "Ez denbora segida"
+    }
+  }
+]
