@@ -40,6 +40,7 @@ from tempfile import mkdtemp
 from shutil import rmtree
 
 import numpy as np
+import pandas as pd
 from scipy import sparse
 import deap
 from deap import base, creator, tools, gp
@@ -1088,7 +1089,7 @@ class TPOTBase(BaseEstimator):
 					'customized config dictionary supports sparse matriies.'
 				)
 		else:
-			if np.any(np.isnan(features)):
+			if np.any(pd.isnull(features)):
 				self._imputed = True
 				features = self._impute_values(features)
 

@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import {HashRouter as Router, Route, Switch, Redirect} from "react-router-dom";
 
@@ -25,41 +25,36 @@ const alertOptions = {
     position: 'top center'
 };
 
-class App extends Component {
-    componentDidMount() {
-
+function App(props) {
+    useEffect(() => {
         store.dispatch(loadUser());
-    }
+    }, []);
 
+    return (
+        <Provider store={store}>
+            <AlertProvider template={AlertTemplate} {...alertOptions}>
+                <Router>
+                    <>
+                        <Header/>
+                        <Alerts/>
+                        <div className="container">
+                            <Switch>
+                                <PrivateRoute exact path="/" component={Dashboard}/>
+                                <PrivateRoute exact path="/:id(\d+)" component={Fitxategiak}/>
+                                <Route exact path="/login" component={Login}/>
+                                <Route exact path="/register" component={Register}/>
+                                <PrivateRoute exact path="/grafikoak" component={Grafikoak}/>
+                                <PrivateRoute exact path="/azterketaGehitu" component={AzterketaForm}/>
+                                <PrivateRoute exact path="/azterketak" component={Azterketak}/>
+                                <PrivateRoute exact path="/emaitza/:id(\d+)" component={AzterketaEmaitza}/>
+                            </Switch>
+                        </div>
+                    </>
+                </Router>
+            </AlertProvider>
+        </Provider>
+    );
 
-    render() {
-
-
-        return (
-            <Provider store={store}>
-                <AlertProvider template={AlertTemplate} {...alertOptions}>
-                    <Router>
-                        <Fragment>
-                            <Header/>
-                            <Alerts/>
-                            <div className="container">
-                                <Switch>
-                                    <PrivateRoute exact path="/" component={Dashboard}/>
-                                    <PrivateRoute exact path="/:id(\d+)" component={Fitxategiak}/>
-                                    <Route exact path="/login" component={Login}/>
-                                    <Route exact path="/register" component={Register}/>
-                                    <PrivateRoute exact path="/grafikoak" component={Grafikoak}/>
-                                    <PrivateRoute exact path="/azterketaGehitu" component={AzterketaForm}/>
-                                    <PrivateRoute exact path="/azterketak" component={Azterketak}/>
-                                    <PrivateRoute exact path="/emaitza/:id(\d+)" component={AzterketaEmaitza}/>
-                                </Switch>
-                            </div>
-                        </Fragment>
-                    </Router>
-                </AlertProvider>
-            </Provider>
-        );
-    }
 }
 
 ReactDOM.render(<App/>, document.getElementById('app'));

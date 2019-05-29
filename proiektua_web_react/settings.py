@@ -21,10 +21,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'j+o6k8s*cr=l&$_a=j7ah$+ccs%znh@^clss$jbcw3r#8f)1up'
 
-DOCKER = False
+DOCKER = True
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = not DOCKER
 
 ALLOWED_HOSTS = ['*']
 
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
 	'django.contrib.contenttypes',
 	'django.contrib.sessions',
 	'django.contrib.messages',
+	'whitenoise.runserver_nostatic',
 	'django.contrib.staticfiles',
 	'backend',
 	'rest_framework',
@@ -142,14 +143,24 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 MEDIA_ROOT = f'{BASE_DIR}/assets'
+STATICFILES_DIRS = [
+	os.path.join(BASE_DIR, "frontend/static"),
+
+]
+
+if DOCKER:
+	host = 'proiektuawebreact_redis_1'
+else:
+	host = 'localhost'
 
 CHANNEL_LAYERS = {
 	'default': {
 		'BACKEND': 'channels_redis.core.RedisChannelLayer',
 		'CONFIG': {
-			'hosts': [('localhost', 6379)],
+			'hosts': [(host, 6379)],
 		},
 	},
 }

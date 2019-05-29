@@ -1,4 +1,7 @@
 module.exports = {
+    performance: {
+        maxEntrypointSize: 1000000
+    },
     module: {
         rules: [
             {

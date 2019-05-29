@@ -1,9 +1,9 @@
 from __future__ import absolute_import, unicode_literals
 import pandas as pd
 from sklearn.model_selection import train_test_split
-
+from ts_featurizer import TimeSeriesFeaturizer
 from backend.models import Azterketa
-
+import numpy as np
 
 def azterketa_hasi(id, callback):
 	# TODO Hemen requesteko erabiltzailearen arabera jasoko da azterketa eta erabiltzaile horrena den egiaztatuko da
@@ -32,23 +32,32 @@ def azterketa_hasi(id, callback):
 
 
 def tseries_process(tseries_config, proiektua):
-	# Hau agian bigarren async egin beharko litzateke
+	ts = TimeSeriesFeaturizer()
 
-	datu_lista = kendu_sentsoreak(proiektua.fitxategiak.all(), [])
+	datu_lista, targetak = kendu_sentsoreak(proiektua.fitxategiak.all(), proiektua.target)
+	model_kop = int(tseries_config.model_ratio * len(datu_lista))
 
-	# TODO Hau gero ts_featurizerretik pasako da, modelRatio, chunkSize eta horien arabera.
-	# TODO Bukatu ostean lortutako ezaugarrien dataframea + targeten Seriea itzuliko dira
-	return pd.DataFrame([]), pd.Series([])
+	model_features = ts.featurize(datu_lista[:model_kop])
+	features = ts.featurize(datu_lista[model_kop:], apply_model=True)
+	all_features = pd.concat([model_features, features])
+
+	all_features = all_features.replace([np.inf, -np.inf], np.nan)
+	na_cols = features.columns[all_features.isna().any()]
+	all_features.drop(axis=1, columns=na_cols, inplace=True)
+
+	return all_features, targetak
 
 
-def kendu_sentsoreak(fitxategiak, sentsoreak):
+def kendu_sentsoreak(fitxategiak, target):
 	import pandas as pd
 	file_list = list()
+	targets = list()
 	for f in fitxategiak:
 		data = pd.read_csv(f.fitxategia)
-		file_list.append(data[sentsoreak])
+		file_list.append(data.drop(columns=[target], axis=1))
+		targets.append(data[target][0])
 
-	return file_list
+	return file_list, pd.Series(targets)
 
 
 def tpot_process(azterketa, callback):

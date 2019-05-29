@@ -39,7 +39,7 @@ function AzterketaForm(props) {
         if (props.atazaMotak.length === 0) props.jasoAtazaMotak();
         if (props.datuMotak.length === 0) props.jasoDatuMotak();
 
-    }, [])
+    }, []);
 
 
     function nextStep() {
@@ -75,6 +75,7 @@ function AzterketaForm(props) {
 
     const getRenderByStep = (step) => {
 
+
         switch (step) {
 
             case 1:
@@ -85,7 +86,7 @@ function AzterketaForm(props) {
                         setters={{setProiektua, setTrainToTest, setIzena}}
                         proiektuak={props.proiektuak}
                         values={{proiektua, trainToTest, izena}}/>
-                )
+                );
 
 
             case 2:
@@ -99,7 +100,7 @@ function AzterketaForm(props) {
                         values={{ataza, datu}}
                         setters={{setAtaza, setDatu}}
                     />
-                )
+                );
 
 
             case 3:
@@ -110,7 +111,7 @@ function AzterketaForm(props) {
                         prevStep={prevStep}
                         setters={{setModelRatio, setNJobsTSeries, setChunkSize}}
                         values={{modelRatio, nJobsTSeries, chunkSize}}/>
-                )
+                );
 
             case 4:
                 return (
@@ -120,7 +121,7 @@ function AzterketaForm(props) {
                         setters={{setNJobsTPOT, setPopulation, setGenerations, setCV}}
                         values={{nJobsTPOT, population, generations, cv}}
                     />
-                )
+                );
             case 5:
                 const values = {
                     nJobsTPOT, population, generations, cv,

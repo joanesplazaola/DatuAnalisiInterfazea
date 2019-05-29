@@ -10,14 +10,17 @@ services:
       - 8000:8000
     volumes:
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-    volumes_from:
-      - backend
   postgres:
     extends:
       file: docker-common.yml
       service: postgres
     ports:
       - 5433:5432
+    environment:
+      FILLA_DB_USER: proiektua_web_react
+      FILLA_DB_PASSWORD: password
+      FILLA_DB_DATABASE: proiektua_web_react
+      POSTGRES_USER: postgres
     volumes:
       - ./docker/postgres/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
 
@@ -32,10 +35,28 @@ services:
     links:
       - postgres
       - redis
-    entrypoint:
-      - /django-entrypoint.sh
+    environment:
+      DEBUG: 'false'
+      DOCKER: 'true'
     expose:
       - 8000
+  channels:
+    extends:
+      file: docker-common.yml
+      service: channels
+    links:
+      - postgres
+      - redis
+    expose:
+      - 9000
+  worker:
+    extends:
+      file: docker-common.yml
+      service: worker
+    links:
+      - postgres
+      - redis
+
   frontend:
     extends:
       file: docker-common.yml

@@ -14,13 +14,29 @@ services:
     volumes:
       - ./docker/postgres/data:/var/lib/postgresql
 
-  django:
+  django: &django
+    restart: always
+    build:
+      context: .
+      dockerfile: ./docker/django/Dockerfile.server
+    volumes:
+      - .:/django
+  channels:
     restart: always
     build:
       context: .
       dockerfile: ./docker/django/Dockerfile
     volumes:
       - .:/django
+  worker:
+    <<: *django
+    restart: always
+    build:
+      context: .
+      dockerfile: ./docker/worker/Dockerfile
+    volumes:
+      - .:/django
+
 
   web:
     restart: always

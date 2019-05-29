@@ -3,14 +3,14 @@ import React from 'react';
 function Laburpena(props) {
 
     let tseriesConf = <></>;
+
     const {prevStep, gordeSaiakera, values} = props;
     const {
         nJobsTPOT, population, generations, cv,
         proiektua, modelRatio, nJobsTSeries, chunkSize,
         ataza, datu, izena
     } = values;
-
-    if (ataza.label === "Denbora segida") {
+    if (datu.label === "Denbora segida") {
 
         tseriesConf = (<>
             <h3>Denbora segida konfigurazioa</h3>

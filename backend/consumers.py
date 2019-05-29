@@ -120,7 +120,7 @@ class BackgroundTaskConsumer(SyncConsumer):
 		azterketa = Azterketa.objects.get(id=self.azterketa_id)
 		serializer = PausuaSerializer(azterketa.pausuak.all(), many=True)
 
-		data = {"egoera": Azterketa.AMAITUTA, 'emaitza': emaitza, }
+		data = {"egoera": Azterketa.AMAITUTA, 'emaitza': emaitza, 'portzentaia': 100}
 		self.bidali_aldaketa(
 			dict(data, **{'pausuak': serializer.data}),
 			dict(data, **{'amaitu_data': datetime.now(tz)})

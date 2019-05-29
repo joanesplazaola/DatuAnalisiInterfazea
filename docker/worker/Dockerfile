@@ -3,13 +3,13 @@ MAINTAINER Filipe Garcia <filipe.garcia@seedstarslabs.com>
 
 ENV PYTHONUNBUFFERED 1
 
-COPY ./docker/django/asgi-entrypoint.sh /asgi-entrypoint.sh
+COPY ./docker/worker/worker-entrypoint.sh /worker-entrypoint.sh
 COPY requirements.txt /django/
 
 WORKDIR /django
 
-RUN chmod +x /asgi-entrypoint.sh
-ENTRYPOINT ["/asgi-entrypoint.sh"]
+RUN chmod +x /worker-entrypoint.sh
+ENTRYPOINT ["/worker-entrypoint.sh"]
 
 RUN pip install pip
 RUN pip install -r requirements.txt
